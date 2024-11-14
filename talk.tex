@@ -1,0 +1,179 @@
+\documentclass[11pt]{beamer}
+\usetheme{Bergen}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{fontawesome}
+\usepackage{dsfont}
+\author{José Antonio García Hernández}
+\title{Métodos Monte Carlo en Teorías Cuánticas de Campos (Lattice QFT)}
+\setbeamercovered{transparent} 
+\setbeamertemplate{navigation symbols}{} 
+\logo{} 
+\institute{Instituto de Ciencias Nucleares, UNAM} 
+\date{29 noviembre 2024} 
+\subject{Lattice Field Theories} 
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%\begin{frame}
+%\tableofcontents
+%\end{frame}
+
+\begin{frame}{Formalismo de la integral funcional}
+
+    Suma sobre configuraciones del campo $\phi$. Integral funcional
+    $$Z = \int \mathcal{D}\phi \, e^{iS[\phi]},$$
+    donde $S[\phi]$ es la acción de la configuración
+    $$ S[\phi] = \int d^4 x \, \left( \frac{1}{2}\partial_{\mu}\phi \partial^{\mu}\phi - V(\phi)\right).$$
+    Funciones de $n$ puntos
+    $$ \langle O(\phi(x_1)) \cdots \rangle =  \frac{1}{Z}\int \mathcal{D}\phi \, O(\phi(x_1))\cdots e^{iS[\phi]}.$$
+\end{frame}
+
+\begin{frame}{Rotación de Wick. Espacio euclidiano}
+    Rotación de Wick \\~
+    $$ t \to i t.$$
+    %Espaciotiempo de Minkowski $\to$ Espaciotiempo euclidiano \\~
+    $$ \eta_{\mu\nu} \to \delta_{\mu\nu}$$
+        
+    Factor de peso 
+        $$ \int \mathcal{D}\phi \, e^{iS} \to  \int \mathcal{D}\phi \, e^{-S_{\text{E}}},$$
+        donde 
+        $$ S_{\text{E}} = \int d^4 x \, \left( \frac{1}{2}\partial_{\mu}\phi \partial_{\mu}\phi + V(\phi)\right).$$
+        Función de partición $ Z = \int \mathcal{D}s\, e^{-\beta H[s]}$.
+        
+        Teoría de campos $\to$ Física estadística. 
+\end{frame}
+
+\begin{frame}{Regularización de la retícula (Lattice Regularization).}
+    $Z$ cantidad altamente divergente.\\~
+    
+    Necesita ser regularizada. \\~
+    
+    Regularización de la retícula:
+    Discretizar el espaciotiempo
+    \begin{itemize}
+         \item $\displaystyle\partial_\mu\phi \to \frac{\phi(x + a\hat{\mu}) - \phi(x)}{a}$
+         \item $\displaystyle\int d^4x \to a^4\sum_{x}$
+    \end{itemize}
+    
+    Unidades de lattice $a = 1$. \\~
+    
+    Formalismo NO PERTURBATIVO.
+\end{frame}
+
+\begin{frame}
+    $$\langle O \rangle = \sum_i^{N} O_i$$
+    donde $O_i$ es generada con probabilidad $\frac{1}{Z}e^{-S_{\text{E}}}$
+\end{frame}
+
+\begin{frame}{Muestreo de importancia (importance sampling)}
+    Para generar configuraciones, el algoritmo necesita cumplir
+    \begin{itemize}
+        \item Ergodicidad
+        \item Balance detallado (detailed balance)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Algoritmos de actualización}
+    Locales
+    \begin{itemize}
+        \item Metropolis
+        \item Glauber
+        \item Heatbath
+        \item Hybrid Monte Carlo
+        \item etc\dots
+    \end{itemize}
+    
+    \ \\~
+    
+    Globales
+    \begin{itemize}
+        \item Wolff
+        \item Swedesen-Wang
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Algoritmo Metropolis}
+    \begin{itemize}
+        \item Escogemos un sitio de la retícula $x$.
+        \item Generamos una propuesta del campo a actualizar $\phi_x \to \phi'_x$.
+        \item Aceptamos la propuesta con probabilidad 
+        $$ p = \min\left(1, \exp\left(-\Delta S\right)\right),$$
+           donde
+        $$ \Delta S = S[\phi'] - S[\phi].$$        
+        (Generamos un numero aleatorio $r\in[0,1)$ si $r<p$, $\phi_x$ se actualiza a $\phi'_x$. Si $r>p$, rechazamos el cambio y conservamos a $\phi_x$.)
+      
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Análisis estadístico}
+
+    \begin{itemize}
+        \item Generación de configuraciones.
+        \item Toma de mediciones.
+        \item Cálculo de errores. Comúnmente \emph{Jackknife}.
+        \item Interpretación de resultados.
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Ejemplo: Modelo de Ising 2d}
+
+Función hamiltoniana
+$$ H[s] = -J\sum_{\langle ij \rangle} s_i s_j .$$
+Función de partición
+$$ Z = \sum_s e^{-\beta H[s]}.$$
+
+\end{frame}
+
+\begin{frame}{Ejemplo: Oscilador anarmónico cuántico 1d}
+
+    Lagrangiano euclidiano
+
+    $$ L_{\text{E}} = \frac{1}{2}\left(\partial_{\mu}x\right)^2 + \frac{1}{2}m^2 x^2 + \frac{1}{4}\lambda x^4,$$
+con $\lambda > 0$. \\~
+
+Del teorema del virial calculamos la energía del estado base $E_0$ 
+$$ \langle E_0 \rangle = m^2\langle x \rangle + \lambda \langle x^3 \rangle. $$
+\end{frame}
+
+\begin{frame}{Ejemplo: Teoría de norma U(1) 2d}
+
+Acción estándard de Wilson
+$$ S[U] = \frac{\beta}{2}\sum_{x}\sum_{\mu < \nu} \text{Re} \left[1 - U_{\mu\nu} \right], $$
+donde $\beta = 2/g^2$, con $g$ el acoplamiento de norma. 
+\end{frame}
+
+\begin{frame}{Ejemplo: Teoría de norma SU(2) 4d}
+Acción estándard de Wilson
+$$ S[U] = \frac{\beta}{4}\sum_{x}\sum_{\mu < \nu} \text{Re Tr} \left[\mathds{1} - U_{\mu\nu} \right] $$
+\end{frame}
+
+
+\begin{frame}{Ejemplo: Teoría de norma SU(3) 4d}
+Acción estándard de Wilson
+$$ S[U] = \frac{\beta}{6}\sum_{x}\sum_{\mu < \nu} \text{Re Tr} \left[\mathds{1} - U_{\mu\nu} \right] $$
+\end{frame}
+
+
+\begin{frame}{Resumen}
+
+Regularización de \emph{lattice} es un enfoque no perturbativo.
+    
+\end{frame}
+
+\begin{frame}{Referencias}
+
+¡Siganme en mi GitHub \faGithub !
+\url{https://github.com/JoseAntonioLattice}
+\end{frame}
+
+
+\end{document}
