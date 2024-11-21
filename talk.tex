@@ -1,5 +1,5 @@
 \documentclass[11pt]{beamer}
-%\usetheme{Bergen}
+\usetheme{Bergen}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -7,8 +7,10 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{fontawesome}
+\usepackage{movie15}
 \usepackage{dsfont}
 \usepackage{tikz}
+\usetikzlibrary{decorations.markings}
 
 \tikzset{
   invisible/.style={opacity=0},
@@ -17,7 +19,7 @@
     \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
   },
 }
-
+\setbeamertemplate{footline}[frame number]
 \author{José Antonio García Hernández}
 \title{Métodos Monte Carlo en Teorías Cuánticas de Campos (Lattice QFT)}
 \setbeamercovered{transparent} 
@@ -241,6 +243,10 @@ $$S[s] = \beta H[s].$$
 \end{tikzpicture}
 \end{frame}
 
+\begin{frame}
+    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/ising.mp4}
+\end{frame}
+
 \subsection{Oscilador anarmónico cuántico}
 \begin{frame}{Ejemplo: Oscilador anarmónico cuántico 1d}
 
@@ -267,12 +273,54 @@ Densidad lagrangiana euclidiana
     con $\lambda \ge 0$. \\~
 \end{frame}
 
+\begin{frame}
+    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/field.avi}
+\end{frame}
+
+
+\begin{frame}{Teoría de norma en la retícula}
+
+
+Formulación compacta 
+$$A_{\mu}(x) \in \mathfrak{su}(N) \to U_{\mu}(x) \in \text{SU}(N), \ \ \ U_{\mu}(x) = e^{iA_{\mu}(x)}$$ 
+
+	\begin{tikzpicture}[scale = 0.7]
+		\tikzset{middlearrow/.style={decoration={markings,mark= at position 0.6 with {\arrow{#1}} ,},postaction={decorate}}};
+		\draw[step=2cm,color=gray] (-1,-1) grid (3,3);
+		\draw[middlearrow={latex}, very thick,red] (0,0) --(2,0);
+		\draw[middlearrow={latex}, very thick,red] (2,0)--(2,2);
+		\draw[middlearrow={latex}, very thick,red] (2,2)--(0,2);
+		\draw[middlearrow={latex}, very thick,red] (0,2)--(0,0);
+		\filldraw[black] (0,0) circle(0.1);
+		\filldraw[black] (2,0) circle(0.1);
+		\filldraw[black] (2,2) circle(0.1);
+		\filldraw[black] (0,2) circle(0.1);
+		\draw[] (0,0) node[below left] {\small  $x$};
+		\draw[] (2,0) node[below right] {\small  $x+\hat\mu$};
+		\draw[] (0,2) node[above left] {\small  $x+\hat\nu$};
+		\draw[] (2,2) node[above right] {\small  $x+\hat\mu+\hat\nu$};
+		
+		\draw[] (8,1) node[] {\small  $U_{x,\mu\nu} = U^{\dagger}_{x,\nu} U^{\dagger}_{x+\hat\nu,\mu}U_{x+\hat\mu,\nu}U_{x,\mu}$};
+		
+		\draw[blue] (1,0) node[below] {\small $U_{x,\mu}$};
+		\draw[blue] (2,1) node[right] {\small  $U_{x+\hat\mu,\nu}$};	
+		\draw[blue] (1,2) node[above] {\small  $U^{\dagger}_{x+\hat\nu,\mu}$};
+		\draw[blue] (0,1) node[left] {\small  $U^{\dagger}_{x,\nu}$};
+			
+	\end{tikzpicture}
+     
+    Acción estándard de Wilson
+$$ S[U] = \frac{\beta}{N}\sum_{x}\sum_{\mu < \nu} \text{Tr Re} \left[\mathds{1} - U_{x,\mu\nu} \right], $$
+donde $\beta = 2N/g^2$, con $g$ el acoplamiento de norma. 
+
+\end{frame}
+
 \subsection{Teoría de norma U(1)}
 \begin{frame}{Ejemplo: Teoría de norma U(1) 2d}
 
 Acción estándard de Wilson
 $$ S[U] = \beta\sum_{x}\sum_{\mu < \nu} \text{Re} \left[1 - U_{\mu\nu} \right], $$
-donde $\beta = 2N/g^2$, con $g$ el acoplamiento de norma. 
+donde $\beta = 2/g^2$, con $g$ el acoplamiento de norma. 
 \end{frame}
 
 \subsection{Teoría de norma SU(2)}
