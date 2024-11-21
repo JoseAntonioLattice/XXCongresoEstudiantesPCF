@@ -1,5 +1,5 @@
 \documentclass[11pt]{beamer}
-\usetheme{Bergen}
+%\usetheme{Bergen}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -8,6 +8,16 @@
 \usepackage{hyperref}
 \usepackage{fontawesome}
 \usepackage{dsfont}
+\usepackage{tikz}
+
+\tikzset{
+  invisible/.style={opacity=0},
+  visible on/.style={alt={#1{}{invisible}}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+}
+
 \author{José Antonio García Hernández}
 \title{Métodos Monte Carlo en Teorías Cuánticas de Campos (Lattice QFT)}
 \setbeamercovered{transparent} 
@@ -22,15 +32,17 @@
 \titlepage
 \end{frame}
 
-%\begin{frame}
-%\tableofcontents
-%\end{frame}
+\begin{frame}
+\tableofcontents
+\end{frame}
 
+\section{Introducción}
+\subsection{Integral funcional}
 \begin{frame}{Formalismo de la integral funcional}
 
-    Suma sobre configuraciones del campo $\phi$. Integral funcional
+    Integral funcional: Suma sobre configuraciones del campo $\phi$
     $$Z = \int \mathcal{D}\phi \, e^{iS[\phi]},$$
-    donde $S[\phi]$ es la acción de la configuración
+    donde $S[\phi]$ es la acción% de la configuración
     $$ S[\phi] = \int d^4 x \, \left( \frac{1}{2}\partial_{\mu}\phi \partial^{\mu}\phi - V(\phi)\right).$$
     Funciones de $n$ puntos
     $$ \langle O[\phi(x_1)] \cdots \rangle =  \frac{1}{Z}\int \mathcal{D}\phi \, O[\phi(x_1)]\cdots e^{iS[\phi]}.$$
@@ -51,15 +63,23 @@
         Teoría de campos $\to$ Física estadística. 
 \end{frame}
 
+\subsection{Regularización de la retícula}
 \begin{frame}{Regularización de la retícula (Lattice Regularization).}
     $Z$ cantidad altamente divergente.\\~
     
-    Necesita ser regularizada. \\~
+    Regularización de la retícula: %Discretizar el espaciotiempo
     
-    Regularización de la retícula:
-    Discretizar el espaciotiempo
+    \begin{center}
+    \begin{tikzpicture}[scale = 0.5]
+    	\draw (-0.5,-0.5) grid (2.5,2.5);
+    	\fill[red] (1,1) circle(0.15);
+    	\draw[red] (1.5,1.5) node[]{$\phi_x$};
+    	\draw[blue] (2,0) node[above right]{ $a$};
+    \end{tikzpicture}
+    \end{center}
     \begin{itemize}
-         \item $\displaystyle\partial_\mu\phi \to \frac{\phi(x + a\hat{\mu}) - \phi(x)}{a}$
+    		\item $\phi(x) \to \phi_x$
+         \item $\displaystyle\partial_\mu\phi(x) \to \frac{\phi_{x + a\hat{\mu}} - \phi_x}{a}$
          \item $\displaystyle\int d^4x \to a^4\sum_{x}$
     \end{itemize}
     
@@ -70,7 +90,7 @@
 
 \begin{frame}{Cadenas de Markov}
 
-    Generamos una cadena de configuraciones donde la configuracion actual depende solo de la anterior (cadena de Markov)
+    Generamos una cadena de configuraciones donde la configuración actual depende solo de la anterior (cadena de Markov)
     
     $$ [\phi_1] \to [\phi_2] \to \cdots$$
 
@@ -81,9 +101,30 @@
 \begin{frame}{Muestreo de importancia (importance sampling)}
     Para generar configuraciones, el algoritmo necesita cumplir
     \begin{itemize}
-        \item Ergodicidad
-        \item Balance detallado (detailed balance)
+        \item<1-> Ergodicidad
+        \begin{center}
+        		\begin{tikzpicture}
+        			\draw (0,0) rectangle (4,2);
+        			\draw[blue] (0.1,0.5) -- (1,1.18) -- (3, 0.3) -- (3.7, 1.9) -- (1, 0.1) --(0.8,1.8) -- (2,1.5);
+        		\end{tikzpicture}
+        \end{center}
+        \item<2-> Balance detallado (detailed balance)
+        \begin{center}
+        \begin{tikzpicture}
+    		\coordinate (A) at (0.7,0.7);
+    		\coordinate (B) at (3,1.5);
+    		\draw (0,0) rectangle (4,2);
+    		\fill[] (A) circle(0.1) node[left]{$A$};
+    		\fill[] (B) circle(0.1) node[right]{$B$};
+    		\draw[blue,thick, -latex] (A) to[out = 90, in = 180] (B);
+    	\draw[red,thick, -latex] (B) to[out = -90, in = 0] (A);		
+    		
+    \end{tikzpicture}
+    \end{center}
+    $$ \pi[A]p[A \to B] = \pi[B]p[B \to A]$$
     \end{itemize}
+    
+    
 \end{frame}
 
 \begin{frame}{Algoritmos de actualización}
@@ -115,13 +156,16 @@
         $$ \Delta S = S[\phi'] - S[\phi].$$        
         (Generamos un número aleatorio $r\in[0,1)$ si $r<p$, $\phi_x$ se actualiza a $\phi'_x$. Si $r>p$, rechazamos el cambio y conservamos a $\phi_x$.)
       
+      	\item Aplicamos los pasos anteriores a todos los puntos de la retícula (\emph{sweep}). 
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Análisis estadístico}
+\begin{frame}{Simulación Monte Carlo}
 
     \begin{itemize}
+    		\item Configuración inicial \emph{hot} o \emph{cold} \emph{start}.
         \item Generación de configuraciones.
+        \item Equilibrio.
         \item Toma de mediciones.
         \item Cálculo de promedios y errores (comúnmente \emph{Jackknife}).
         \item Interpretación de resultados.
@@ -129,17 +173,75 @@
 
 \end{frame}
 
+\section{Ejemplos}
+\subsection{Modelo de Ising}
 \begin{frame}{Ejemplo: Modelo de Ising 2d}
+
+Espín clásico $s_x\in\{-1,1\}$. \\~
 
 Función hamiltoniana
 $$ H[s] = -J\sum_{\langle ij \rangle} s_i s_j,$$
-$\langle ij \rangle$ representa la suma sobre primeros vecinos.
+$i$, $j$ son puntos en la retícula y $\langle ij \rangle$ representa la suma sobre primeros vecinos.\\~
 
 Función de partición
 $$ Z = \sum_s e^{-\beta H[s]}.$$
 
+Definimos
+$$S[s] = \beta H[s].$$
+
 \end{frame}
 
+\begin{frame}{Paso Metropolis}
+\begin{tikzpicture}
+	\coordinate (A) at (0,0.5);
+	\coordinate (B) at (0,-0.5); 
+	\draw (-0.5,-0.5) grid (3.5,3.5);
+	\draw[visible on = <1>] (6,2) node[]{Configuración de espines $[s]$};
+	\draw[visible on = <1>] (6,1) node[]{Fijamos $\beta = 0.25$.};
+	\draw[-latex,very thick,blue, visible on=<1->] (0,0) -- +(A);
+	\draw[-latex,very thick,red, visible on=<1->]  (1,0) -- +(B);
+	\draw[-latex,very thick,blue,visible on=<1->] (2,0) -- +(A);
+	\draw[-latex,very thick,blue,visible on=<1->] (3,0) -- +(A);
+	\draw[-latex,very thick,red,visible on=<1->]  (0,1) -- +(B);
+	\draw[-latex,very thick,red,visible on=<1-11>] (1,1) -- +(B);
+	\draw[-latex,very thick,red,visible on=<1->]  (2,1) -- +(B);
+	\draw[-latex,very thick,red,visible on=<1->]  (3,1) -- +(B);
+	\draw[-latex,very thick,blue,visible on=<1->] (0,2) -- +(A);
+	\draw[-latex,very thick,blue,visible on=<1->] (1,2) -- +(A);
+	\draw[-latex,very thick,blue,visible on=<1->] (2,2) -- +(A);
+	\draw[-latex,very thick,red,visible on=<1->]  (3,2) -- +(B);
+	\draw[-latex,very thick,red,visible on=<1->]  (0,3) -- +(B);
+	\draw[-latex,very thick,blue,visible on=<1->] (1,3) -- +(A);
+	\draw[-latex,very thick,red,visible on=<1->]  (2,3) -- +(B);
+	\draw[-latex,very thick,blue,visible on=<1->] (3,3) -- +(A);
+	
+	\draw[red,visible on=<2-11>] (0.5,0.5) node[right]{$s_x$};
+	\draw[visible on = <2>] (6,2) node[]{Escogemos un sitio $x$};
+	
+	\draw[visible on = <3>] (6,2) node[]{Proponemos $s_x \to s'_x$};
+	\draw[-latex,very thick,blue,opacity=1,visible on =<3->]  (1,1) -- +(A);
+	\draw[blue,dashed,visible on=<3-11>] (1,1.3)  circle(0.3);
+	\draw[blue,visible on=<3-11>] (1.5,1.5) node[]{$s'_x$};
+	
+	\draw[visible on = <4-6>] (6,2) node[]{Calculamos $\Delta S $};
+	\draw[visible on = <5-6>] (4,-1) node[]{$\Delta S = 2\beta s_x\cdot(s_{x+\hat{1}} + s_{x-\hat{1}} + s_{x+\hat{2}} + s_{x-\hat{2}})$};
+	
+	\draw[visible on = <6>] (4,-2) node[]{$\Delta S = 2(0.25)(-1)(-1-1-1+1) = 1$};
+	
+	\draw[visible on = <7>] (4,-1) node[]{Aceptamos el cambio con probabilidad};
+	\draw[visible on = <7>] (4,-2) node[]{$p = \min(1,e^{-\Delta S}) = \min\left(1,e^{-1}\right) = e^{-1}\approx 0.37$};
+	
+	\draw[visible on = <8-11>] (4,-1) node[]{$p \approx 0.37$};
+	\draw[visible on = <8-11>] (4,-2) node[]{Generamos un número aleatorio $r \in[0,1)$};
+	\draw[visible on = <9>] (4,-3) node[]{$r = 0.1375\dots$};
+		\draw[visible on = <10-11>] (4,-3) node[]{$r = 0.1375\dots < p = 0.37$};
+		\draw[visible on = <11>] (4,-4) node[]{Aceptamos el cambio $\checkmark$};
+		
+		\draw[visible on = <12>] (4,-2) node[]{Nueva configuración};
+\end{tikzpicture}
+\end{frame}
+
+\subsection{Oscilador anarmónico cuántico}
 \begin{frame}{Ejemplo: Oscilador anarmónico cuántico 1d}
 
     Lagrangiano euclidiano
@@ -153,13 +255,19 @@ calculamos la energía del estado base $E_0$
 $$ \langle E_0 \rangle = m\omega^2\langle x^2 \rangle + 3\lambda \langle x^4 \rangle. $$
 \end{frame}
 
+
+\subsection{Teoría $\lambda \phi^4$}
 \begin{frame}{Ejemplo: Teoría $\lambda \phi^4$ 2d}
 
-Lagrangiano euclidiano
+Sea $\phi(x)\in\mathbb{R}$.\\~
 
-    $$ L_{\text{E}} = \frac{1}{2}\partial_{\mu} \phi \partial_{\mu}\phi + \frac{1}{2}m^2  \phi^2 + \frac{\lambda}{4} \phi^4,$$
+Densidad lagrangiana euclidiana
+
+    $$ \mathcal{L}_{\text{E}} = \frac{1}{2}\partial_{\mu} \phi \partial_{\mu}\phi + \frac{1}{2}m^2  \phi^2 + \frac{\lambda}{4} \phi^4,$$
+    con $\lambda \ge 0$. \\~
 \end{frame}
 
+\subsection{Teoría de norma U(1)}
 \begin{frame}{Ejemplo: Teoría de norma U(1) 2d}
 
 Acción estándard de Wilson
@@ -167,21 +275,30 @@ $$ S[U] = \beta\sum_{x}\sum_{\mu < \nu} \text{Re} \left[1 - U_{\mu\nu} \right], 
 donde $\beta = 2N/g^2$, con $g$ el acoplamiento de norma. 
 \end{frame}
 
+\subsection{Teoría de norma SU(2)}
 \begin{frame}{Ejemplo: Teoría de norma SU(2) 4d}
 Acción estándard de Wilson
 $$ S[U] = \frac{\beta}{2}\sum_{x}\sum_{\mu < \nu} \text{Re Tr} \left[\mathds{1} - U_{\mu\nu} \right] $$
 \end{frame}
 
-
+\subsection{Teoría de norma SU(3)}
 \begin{frame}{Ejemplo: Teoría de norma SU(3) 4d}
 Acción estándard de Wilson
 $$ S[U] = \frac{\beta}{3}\sum_{x}\sum_{\mu < \nu} \text{Re Tr} \left[\mathds{1} - U_{\mu\nu} \right] $$
 \end{frame}
 
-
+\section{Resumen}
 \begin{frame}{Resumen}
 
-Regularización de \emph{lattice} es un enfoque no perturbativo.
+Formalismo de la integral funcional, método alternativo a cuantización canónica. \\~
+
+Rotación de Wick: QFT $\to$ Fís.\ Est.\  \\~
+
+Regularización de \emph{lattice} es un enfoque no perturbativo. \\~
+
+Formulación compacta para teorías de norma NO requiere fijar la norma. \\~
+
+La formulación de \emph{lattice} es muy ROBUSTA.
     
 \end{frame}
 
