@@ -243,7 +243,7 @@ $$S[s] = \beta H[s].$$
 \end{tikzpicture}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Termalización}
     \includemovie[autoplay]{\textwidth}{\textwidth}{figures/ising.mp4}
 \end{frame}
 
@@ -261,22 +261,44 @@ calculamos la energía del estado base $E_0$
 $$ \langle E_0 \rangle = m\omega^2\langle x^2 \rangle + 3\lambda \langle x^4 \rangle. $$
 \end{frame}
 
+\begin{frame}{Oscilador armónico}
+    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/harmonic_oscillator_path.mp4}
+\end{frame}
+
+\begin{frame}{Oscilador anarmónico}
+    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/anharmonic_oscillator_path.mp4}
+\end{frame}
 
 \subsection{Teoría $\lambda \phi^4$}
 \begin{frame}{Ejemplo: Teoría $\lambda \phi^4$ 2d}
 
-Sea $\phi(x)\in\mathbb{R}$.\\~
+Sea un campo escalar $\phi(x)\in\mathbb{R}$.\\~
 
 Densidad lagrangiana euclidiana
 
     $$ \mathcal{L}_{\text{E}} = \frac{1}{2}\partial_{\mu} \phi \partial_{\mu}\phi + \frac{1}{2}m^2  \phi^2 + \frac{\lambda}{4} \phi^4,$$
     con $\lambda \ge 0$. \\~
+    
+	Función de 2 puntos
+	$$ \langle \phi(t)\phi(t + \tau)  \rangle_c \propto \exp(-m_r \tau).$$    
+    
 \end{frame}
 
-\begin{frame}
-    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/field.avi}
+\begin{frame}{Fase simétrica}
+    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/symmetric_phase_evolutionfield.mp4}
 \end{frame}
 
+\begin{frame}{Fase rota}
+    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/broken_phase_evolutionfield.mp4}
+\end{frame}
+
+\begin{frame}{Función de correlación conectada}
+\begin{center}
+\includegraphics[scale=0.3]{figures/correlation_function.pdf}
+\end{center}
+
+$$ m_r \approx 0.126. $$
+\end{frame}
 
 \begin{frame}{Teoría de norma en la retícula}
 
@@ -322,6 +344,8 @@ Acción estándard de Wilson
 $$ S[U] = \beta\sum_{x}\sum_{\mu < \nu} \text{Re} \left[1 - U_{\mu\nu} \right], $$
 donde $\beta = 2/g^2$, con $g$ el acoplamiento de norma. 
 \end{frame}
+
+
 
 \subsection{Teoría de norma SU(2)}
 \begin{frame}{Ejemplo: Teoría de norma SU(2) 4d}
