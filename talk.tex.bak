@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{fontawesome}
+\usepackage{xcolor}
 \usepackage{movie15}
 \usepackage{dsfont}
 \usepackage{tikz}
@@ -34,9 +35,9 @@
 \titlepage
 \end{frame}
 
-\begin{frame}
-\tableofcontents
-\end{frame}
+%\begin{frame}
+%\tableofcontents
+%\end{frame}
 
 \section{Introducción}
 \subsection{Integral funcional}
@@ -57,10 +58,10 @@
     $$ \eta_{\mu\nu} \to \delta_{\mu\nu}$$
         
     Factor de peso 
-        $$ \int \mathcal{D}\phi \, e^{iS} \to  \int \mathcal{D}\phi \, e^{-S_{\text{E}}},$$
+        $$ \int \mathcal{D}\phi \, e^{iS[\phi]} \to  \int \mathcal{D}\phi \, e^{-S_{\text{E}}[\phi]},$$
         donde 
-        $$ S_{\text{E}} = \int d^4 x \, \left( \frac{1}{2}\partial_{\mu}\phi \partial_{\mu}\phi + V(\phi)\right).$$
-        Función de partición $ Z = \int \mathcal{D}s\, e^{-\beta H[s]}$.
+        $$ S_{\text{E}}[\phi] = \int d^4 x \, \left( \frac{1}{2}\partial_{\mu}\phi \partial_{\mu}\phi + V(\phi)\right).$$
+        Función de partición $ Z = \int \mathcal{D}\phi\, e^{-\beta H[\phi]}$.
         
         Teoría de campos $\to$ Física estadística. 
 \end{frame}
@@ -123,7 +124,7 @@
     		
     \end{tikzpicture}
     \end{center}
-    $$ \pi[A]p[A \to B] = \pi[B]p[B \to A]$$
+    $$ p[A]p[A \to B] = p[B]p[B \to A]$$
     \end{itemize}
     
     
@@ -135,7 +136,7 @@
         \item Metropolis
         \item Glauber
         \item Heatbath
-        \item Hybrid Monte Carlo
+        %\item Hybrid Monte Carlo
         \item etc\dots
     \end{itemize}
     
@@ -156,7 +157,7 @@
         $$ p = \min\left(1, \exp\left(-\Delta S\right)\right),$$
            donde
         $$ \Delta S = S[\phi'] - S[\phi].$$        
-        (Generamos un número aleatorio $r\in[0,1)$ si $r<p$, $\phi_x$ se actualiza a $\phi'_x$. Si $r>p$, rechazamos el cambio y conservamos a $\phi_x$.)
+        %(Generamos un número aleatorio $r\in[0,1)$ si $r<p$, $\phi_x$ se actualiza a $\phi'_x$. Si $r>p$, rechazamos el cambio y conservamos a $\phi_x$.)
       
       	\item Aplicamos los pasos anteriores a todos los puntos de la retícula (\emph{sweep}). 
     \end{itemize}
@@ -165,7 +166,7 @@
 \begin{frame}{Simulación Monte Carlo}
 
     \begin{itemize}
-    		\item Configuración inicial \emph{hot} o \emph{cold} \emph{start}.
+    		\item Configuración inicial \emph{\textcolor{red}{hot}} o \emph{\textcolor{blue}{cold}} \emph{start}.
         \item Generación de configuraciones.
         \item Equilibrio.
         \item Toma de mediciones.
@@ -198,8 +199,10 @@ $$S[s] = \beta H[s].$$
 	\coordinate (A) at (0,0.5);
 	\coordinate (B) at (0,-0.5); 
 	\draw (-0.5,-0.5) grid (3.5,3.5);
+	\draw[-latex, very thick] (4,2.5) --(4,3.5) node[left]{$\hat{2}$};
+	\draw[-latex, very thick] (4,2.5) --(5,2.5) node[right]{$\hat{1}$};
 	\draw[visible on = <1>] (6,2) node[]{Configuración de espines $[s]$};
-	\draw[visible on = <1>] (6,1) node[]{Fijamos $\beta = 0.25$.};
+	\draw[visible on = <1>] (6,1) node[]{Fijamos $\beta = \frac{1}{4}$.};
 	\draw[-latex,very thick,blue, visible on=<1->] (0,0) -- +(A);
 	\draw[-latex,very thick,red, visible on=<1->]  (1,0) -- +(B);
 	\draw[-latex,very thick,blue,visible on=<1->] (2,0) -- +(A);
@@ -228,7 +231,7 @@ $$S[s] = \beta H[s].$$
 	\draw[visible on = <4-6>] (6,2) node[]{Calculamos $\Delta S $};
 	\draw[visible on = <5-6>] (4,-1) node[]{$\Delta S = 2\beta s_x\cdot(s_{x+\hat{1}} + s_{x-\hat{1}} + s_{x+\hat{2}} + s_{x-\hat{2}})$};
 	
-	\draw[visible on = <6>] (4,-2) node[]{$\Delta S = 2(0.25)(-1)(-1-1-1+1) = 1$};
+	\draw[visible on = <6>] (4,-2) node[]{$\Delta S = 2(\frac{1}{4})(-1)(-1-1-1+1) = 1$};
 	
 	\draw[visible on = <7>] (4,-1) node[]{Aceptamos el cambio con probabilidad};
 	\draw[visible on = <7>] (4,-2) node[]{$p = \min(1,e^{-\Delta S}) = \min\left(1,e^{-1}\right) = e^{-1}\approx 0.37$};
@@ -243,7 +246,7 @@ $$S[s] = \beta H[s].$$
 \end{tikzpicture}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Termalización}
     \includemovie[autoplay]{\textwidth}{\textwidth}{figures/ising.mp4}
 \end{frame}
 
@@ -258,25 +261,47 @@ con $\lambda \ge 0$. \\~
 Del teorema del virial 
 $$\langle T \rangle = \frac{1}{2}\langle x V'(x) \rangle$$
 calculamos la energía del estado base $E_0$ 
-$$ \langle E_0 \rangle = m\omega^2\langle x^2 \rangle + 3\lambda \langle x^4 \rangle. $$
+$$ E_0 = m\omega^2\langle x^2 \rangle + 3\lambda \langle x^4 \rangle. $$
 \end{frame}
 
+\begin{frame}{Oscilador armónico}
+    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/harmonic_oscillator_path.mp4}
+\end{frame}
+
+\begin{frame}{Oscilador anarmónico}
+    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/anharmonic_oscillator_path.mp4}
+\end{frame}
 
 \subsection{Teoría $\lambda \phi^4$}
 \begin{frame}{Ejemplo: Teoría $\lambda \phi^4$ 2d}
 
-Sea $\phi(x)\in\mathbb{R}$.\\~
+Sea un campo escalar $\phi(t,x)\in\mathbb{R}$.\\~
 
 Densidad lagrangiana euclidiana
 
     $$ \mathcal{L}_{\text{E}} = \frac{1}{2}\partial_{\mu} \phi \partial_{\mu}\phi + \frac{1}{2}m^2  \phi^2 + \frac{\lambda}{4} \phi^4,$$
     con $\lambda \ge 0$. \\~
+    
+	Función de 2 puntos
+	$$ \langle \phi(t,x)\phi(t + \tau,x)  \rangle \propto \exp(-m_r \tau).$$    
+    
 \end{frame}
 
-\begin{frame}
-    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/field.avi}
+\begin{frame}{Fase simétrica}
+    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/symmetric_phase_evolutionfield.mp4}
 \end{frame}
 
+\begin{frame}{Fase rota}
+    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/broken_phase_evolutionfield.mp4}
+\end{frame}
+
+\begin{frame}{Función de correlación conectada}
+\begin{center}
+\includegraphics[scale=0.3]{figures/correlation_function.pdf}
+\end{center}
+
+$$ m_r \approx 0.126. $$
+\end{frame}
 
 \begin{frame}{Teoría de norma en la retícula}
 
@@ -309,30 +334,66 @@ $$A_{\mu}(x) \in \mathfrak{su}(N) \to U_{\mu}(x) \in \text{SU}(N), \ \ \ U_{\mu}
 			
 	\end{tikzpicture}
      
-    Acción estándard de Wilson
+    Acción estándar de Wilson
 $$ S[U] = \frac{\beta}{N}\sum_{x}\sum_{\mu < \nu} \text{Tr Re} \left[\mathds{1} - U_{x,\mu\nu} \right], $$
 donde $\beta = 2N/g^2$, con $g$ el acoplamiento de norma. 
 
 \end{frame}
 
-\subsection{Teoría de norma U(1)}
-\begin{frame}{Ejemplo: Teoría de norma U(1) 2d}
+%\subsection{Teoría de norma U(1)}
+%\begin{frame}{Ejemplo: Teoría de norma U(1) 2d}
+%
+%Acción estándar de Wilson
+%$$ S[U] = \beta\sum_{x}\sum_{\mu < \nu} \text{Re} \left[1 - U_{\mu\nu} \right], $$
+%donde $\beta = 2/g^2$, con $g$ el acoplamiento de norma. 
+%\end{frame}
+%
+%\begin{frame}
+%\begin{center}
+%
+%\includegraphics[scale=0.3]{figures/L100.pdf}
+%\end{center}
+%\end{frame}
 
-Acción estándard de Wilson
-$$ S[U] = \beta\sum_{x}\sum_{\mu < \nu} \text{Re} \left[1 - U_{\mu\nu} \right], $$
-donde $\beta = 2/g^2$, con $g$ el acoplamiento de norma. 
-\end{frame}
 
-\subsection{Teoría de norma SU(2)}
-\begin{frame}{Ejemplo: Teoría de norma SU(2) 4d}
-Acción estándard de Wilson
-$$ S[U] = \frac{\beta}{2}\sum_{x}\sum_{\mu < \nu} \text{Re Tr} \left[\mathds{1} - U_{\mu\nu} \right] $$
-\end{frame}
+%\subsection{Teoría de norma SU(2)}
+%\begin{frame}{Ejemplo: Teoría de norma SU(2) 4d}
+%Acción estándar de Wilson
+%$$ S[U] = \frac{\beta}{2}\sum_{x}\sum_{\mu < \nu} \text{Re Tr} \left[\mathds{1} - U_{\mu\nu} \right] $$
+%\end{frame}
+%
+%\begin{frame}
+%\begin{center}
+%\includegraphics[scale=0.3]{figures/L=4_metropolis_glauber_heatbath.pdf}
+%\end{center}
+%\end{frame}
+%
+%\begin{frame}
+%\begin{center}
+%\includegraphics[scale=0.6]{figures/cooling.pdf}
+%\end{center}
+%\end{frame}
 
 \subsection{Teoría de norma SU(3)}
 \begin{frame}{Ejemplo: Teoría de norma SU(3) 4d}
 Acción estándard de Wilson
-$$ S[U] = \frac{\beta}{3}\sum_{x}\sum_{\mu < \nu} \text{Re Tr} \left[\mathds{1} - U_{\mu\nu} \right] $$
+$$ S[U] = \frac{\beta}{3}\sum_{x}\sum_{\mu < \nu} \text{Re Tr} \left[\mathds{1} - U_{\mu\nu} \right].$$
+
+Loop de Polyakov
+$$ P(\vec{x}\,) = \text{Tr}\,\prod_{t_\text{E}=1}^{L_t}U_4(\vec{x},t_\text{E}).$$
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[scale=0.3]{figures/L=6_heatbath_L=3_metropolis.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[scale=0.25]{figures/polyakov_loop_beta=5_7.pdf}
+\includegraphics[scale=0.25]{figures/polyakov_loop.pdf}
+\end{center}
 \end{frame}
 
 \section{Resumen}
@@ -340,9 +401,9 @@ $$ S[U] = \frac{\beta}{3}\sum_{x}\sum_{\mu < \nu} \text{Re Tr} \left[\mathds{1} 
 
 Formalismo de la integral funcional, método alternativo a cuantización canónica. \\~
 
-Rotación de Wick: QFT $\to$ Fís.\ Est.\  \\~
+Rotación de Wick: QFT $\to$ Fís.\ Estadística.  \\~
 
-Regularización de \emph{lattice} es un enfoque no perturbativo. \\~
+Regularización de \emph{lattice} es un enfoque no perturbativo e invariante de norma. \\~
 
 Formulación compacta para teorías de norma NO requiere fijar la norma. \\~
 
