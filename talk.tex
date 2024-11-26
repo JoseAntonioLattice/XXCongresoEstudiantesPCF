@@ -11,6 +11,9 @@
 \usepackage{movie15}
 \usepackage{dsfont}
 \usepackage{tikz}
+\def\insertauthorindicator{Ponente}
+\def\insertinstituteindicator{Instituto}
+\def\insertdateindicator{Fecha}
 \usetikzlibrary{decorations.markings}
 
 \tikzset{
@@ -25,7 +28,7 @@
 \title{Métodos Monte Carlo en Teorías Cuánticas de Campos (Lattice QFT)}
 \setbeamercovered{transparent} 
 \setbeamertemplate{navigation symbols}{} 
-\logo{} 
+
 \institute{Instituto de Ciencias Nucleares, UNAM} 
 \date{29 noviembre 2024 \\ XX Congreso de Estudiantes del PCF} 
 \subject{Lattice Field Theories} 
@@ -33,6 +36,7 @@
 
 \begin{frame}
 \titlepage
+\includegraphics[width=3cm]{icn.png}
 \end{frame}
 
 %\begin{frame}
@@ -295,12 +299,12 @@ Densidad lagrangiana euclidiana
     \includemovie[autoplay]{\textwidth}{\textwidth}{figures/broken_phase_evolutionfield.mp4}
 \end{frame}
 
-\begin{frame}{Función de correlación conectada}
+\begin{frame}{Función de correlación}
 \begin{center}
 \includegraphics[scale=0.3]{figures/correlation_function.pdf}
 \end{center}
 
-$$ m_r \approx 0.126. $$
+$$ m_r = 0.1120(8). $$
 \end{frame}
 
 \begin{frame}{Teoría de norma en la retícula}
@@ -320,10 +324,10 @@ $$A_{\mu}(x) \in \mathfrak{su}(N) \to U_{\mu}(x) \in \text{SU}(N), \ \ \ U_{\mu}
 		\filldraw[black] (2,0) circle(0.1);
 		\filldraw[black] (2,2) circle(0.1);
 		\filldraw[black] (0,2) circle(0.1);
-		\draw[] (0,0) node[below left] {\small  $x$};
-		\draw[] (2,0) node[below right] {\small  $x+\hat\mu$};
-		\draw[] (0,2) node[above left] {\small  $x+\hat\nu$};
-		\draw[] (2,2) node[above right] {\small  $x+\hat\mu+\hat\nu$};
+		\draw[] (0,0) node[below left] {\tiny  $x$};
+		\draw[] (2,0) node[below right] {\tiny  $x+\hat\mu$};
+		\draw[] (0,2) node[above left] {\tiny  $x+\hat\nu$};
+		\draw[] (2,2) node[above right] {\tiny  $x+\hat\mu+\hat\nu$};
 		
 		\draw[] (8,1) node[] {\small  $U_{x,\mu\nu} = U^{\dagger}_{x,\nu} U^{\dagger}_{x+\hat\nu,\mu}U_{x+\hat\mu,\nu}U_{x,\mu}$};
 		
