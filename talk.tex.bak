@@ -11,6 +11,9 @@
 \usepackage{movie15}
 \usepackage{dsfont}
 \usepackage{tikz}
+\def\insertauthorindicator{Ponente}
+\def\insertinstituteindicator{Instituto}
+\def\insertdateindicator{Fecha}
 \usetikzlibrary{decorations.markings}
 
 \tikzset{
@@ -25,7 +28,7 @@
 \title{Métodos Monte Carlo en Teorías Cuánticas de Campos (Lattice QFT)}
 \setbeamercovered{transparent} 
 \setbeamertemplate{navigation symbols}{} 
-\logo{} 
+
 \institute{Instituto de Ciencias Nucleares, UNAM} 
 \date{29 noviembre 2024 \\ XX Congreso de Estudiantes del PCF} 
 \subject{Lattice Field Theories} 
@@ -33,6 +36,7 @@
 
 \begin{frame}
 \titlepage
+\includegraphics[width=3cm]{icn.png}
 \end{frame}
 
 %\begin{frame}
@@ -43,7 +47,7 @@
 \subsection{Integral funcional}
 \begin{frame}{Formalismo de la integral funcional}
 
-    Integral funcional: Suma sobre configuraciones del campo $\phi$
+    Integral funcional: Suma sobre todas  las configuraciones del campo $\phi(x)$
     $$Z = \int \mathcal{D}\phi \, e^{iS[\phi]},$$
     donde $S[\phi]$ es la acción% de la configuración
     $$ S[\phi] = \int d^4 x \, \left( \frac{1}{2}\partial_{\mu}\phi \partial^{\mu}\phi - V(\phi)\right).$$
@@ -68,7 +72,7 @@
 
 \subsection{Regularización de la retícula}
 \begin{frame}{Regularización de la retícula (Lattice Regularization).}
-    $Z$ cantidad altamente divergente.\\~
+    Divergencias ultravioleta.\\~
     
     Regularización de la retícula: %Discretizar el espaciotiempo
     
@@ -78,6 +82,8 @@
     	\fill[red] (1,1) circle(0.15);
     	\draw[red] (1.5,1.5) node[]{$\phi_x$};
     	\draw[blue] (2,0) node[above right]{ $a$};
+    	\draw[-latex, thick] (4,1) --(4,2) node[left]{\small $\hat{2}$};
+	\draw[-latex, thick] (4,1) --(5,1) node[right]{\small $\hat{1}$};
     \end{tikzpicture}
     \end{center}
     \begin{itemize}
@@ -145,7 +151,7 @@
     Globales
     \begin{itemize}
         \item Wolff
-        \item Swedesen-Wang
+        \item Swendsen-Wang
     \end{itemize}
 \end{frame}
 
@@ -170,7 +176,7 @@
         \item Generación de configuraciones.
         \item Equilibrio.
         \item Toma de mediciones.
-        \item Cálculo de promedios y errores (comúnmente \emph{Jackknife}).
+        \item Cálculo de promedios y errores (comúnmente \emph{jackknife}).
         \item Interpretación de resultados.
     \end{itemize}
 
@@ -183,8 +189,8 @@
 Espín clásico $s_x\in\{-1,1\}$. \\~
 
 Función hamiltoniana
-$$ H[s] = -J\sum_{\langle ij \rangle} s_i s_j,$$
-$i$, $j$ son puntos en la retícula y $\langle ij \rangle$ representa la suma sobre primeros vecinos.\\~
+$$ H[s] = -J\sum_{\langle xy \rangle} s_x s_y,$$
+$x$, $y$ son puntos en la retícula y $\langle xy \rangle$ representa la suma sobre primeros vecinos.\\~
 
 Función de partición
 $$ Z = \sum_s e^{-\beta H[s]}.$$
@@ -247,7 +253,7 @@ $$S[s] = \beta H[s].$$
 \end{frame}
 
 \begin{frame}{Termalización}
-    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/ising.mp4}
+%    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/ising.mp4}
 \end{frame}
 
 \subsection{Oscilador anarmónico cuántico}
@@ -265,11 +271,11 @@ $$ E_0 = m\omega^2\langle x^2 \rangle + 3\lambda \langle x^4 \rangle. $$
 \end{frame}
 
 \begin{frame}{Oscilador armónico}
-    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/harmonic_oscillator_path.mp4}
+    %\includemovie[autoplay]{\textwidth}{\textwidth}{figures/harmonic_oscillator_path.mp4}
 \end{frame}
 
 \begin{frame}{Oscilador anarmónico}
-    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/anharmonic_oscillator_path.mp4}
+    %\includemovie[autoplay]{\textwidth}{\textwidth}{figures/anharmonic_oscillator_path.mp4}
 \end{frame}
 
 \subsection{Teoría $\lambda \phi^4$}
@@ -288,19 +294,20 @@ Densidad lagrangiana euclidiana
 \end{frame}
 
 \begin{frame}{Fase simétrica}
-    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/symmetric_phase_evolutionfield.mp4}
+    %\includemovie[autoplay]{\textwidth}{\textwidth}{figures/symmetric_phase_evolutionfield.mp4}
 \end{frame}
 
 \begin{frame}{Fase rota}
-    \includemovie[autoplay]{\textwidth}{\textwidth}{figures/broken_phase_evolutionfield.mp4}
+    %\includemovie[autoplay]{\textwidth}{\textwidth}{figures/broken_phase_evolutionfield.mp4}
 \end{frame}
 
-\begin{frame}{Función de correlación conectada}
+\begin{frame}{Función de correlación}
+Con $\lambda = 0.05$ y $m^2 = -0.75$ 
 \begin{center}
 \includegraphics[scale=0.3]{figures/correlation_function.pdf}
 \end{center}
 
-$$ m_r \approx 0.126. $$
+$$ m_r = 0.1120(8). $$
 \end{frame}
 
 \begin{frame}{Teoría de norma en la retícula}
@@ -320,10 +327,10 @@ $$A_{\mu}(x) \in \mathfrak{su}(N) \to U_{\mu}(x) \in \text{SU}(N), \ \ \ U_{\mu}
 		\filldraw[black] (2,0) circle(0.1);
 		\filldraw[black] (2,2) circle(0.1);
 		\filldraw[black] (0,2) circle(0.1);
-		\draw[] (0,0) node[below left] {\small  $x$};
-		\draw[] (2,0) node[below right] {\small  $x+\hat\mu$};
-		\draw[] (0,2) node[above left] {\small  $x+\hat\nu$};
-		\draw[] (2,2) node[above right] {\small  $x+\hat\mu+\hat\nu$};
+		\draw[] (0,0) node[below left] {\tiny  $x$};
+		\draw[] (2,0) node[below right] {\tiny  $x+\hat\mu$};
+		\draw[] (0,2) node[above left] {\tiny  $x+\hat\nu$};
+		\draw[] (2,2) node[above right] {\tiny  $x+\hat\mu+\hat\nu$};
 		
 		\draw[] (8,1) node[] {\small  $U_{x,\mu\nu} = U^{\dagger}_{x,\nu} U^{\dagger}_{x+\hat\nu,\mu}U_{x+\hat\mu,\nu}U_{x,\mu}$};
 		
@@ -383,17 +390,21 @@ Loop de Polyakov
 $$ P(\vec{x}\,) = \text{Tr}\,\prod_{t_\text{E}=1}^{L_t}U_4(\vec{x},t_\text{E}).$$
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Valor de la plaqueta}
 \begin{center}
 \includegraphics[scale=0.3]{figures/L=6_heatbath_L=3_metropolis.pdf}
 \end{center}
 \end{frame}
 
-\begin{frame}
-\begin{center}
-\includegraphics[scale=0.25]{figures/polyakov_loop_beta=5_7.pdf}
-\includegraphics[scale=0.25]{figures/polyakov_loop.pdf}
-\end{center}
+\begin{frame}{Rompimiento espontáneo de $Z_3$}
+%\begin{center}
+\begin{minipage}[l]{0.5\textwidth}
+\includegraphics[scale=0.2]{figures/polyakov_loop_beta=5_7.pdf}
+\end{minipage}\begin{minipage}[l]{0.5\textwidth}
+\includegraphics[scale=0.2]{figures/polyakov_loop.pdf}
+\end{minipage}
+
+%\end{center}
 \end{frame}
 
 \section{Resumen}
@@ -407,7 +418,9 @@ Regularización de \emph{lattice} es un enfoque no perturbativo e invariante de 
 
 Formulación compacta para teorías de norma NO requiere fijar la norma. \\~
 
-La formulación de \emph{lattice} es muy ROBUSTA.
+La formulación de \emph{lattice} es muy ROBUSTA.\\~
+
+¡Colaboradores BIENVENIDOS!
     
 \end{frame}
 
@@ -415,6 +428,7 @@ La formulación de \emph{lattice} es muy ROBUSTA.
 
 ¡Siganme en mi GitHub \faGithub !
 \url{https://github.com/JoseAntonioLattice}
+\includegraphics[scale=0.15]{figures/github.png}
 \end{frame}
 
 
